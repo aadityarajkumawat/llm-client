@@ -102,7 +102,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col items-start">
               <label htmlFor="name" className="text-zinc-500">
-                Upload a file (Context)
+                Upload a file (only .txt allowed, more extensions coming soon)
               </label>
               <input
                 onChange={(e) => {
