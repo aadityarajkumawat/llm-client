@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";

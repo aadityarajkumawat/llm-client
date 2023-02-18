@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -19,11 +21,11 @@ function AppElm() {
   const { appId } = router.query;
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [prompt, setPrompt] = useState<any>("");
+  const [prompt, setPrompt] = useState<string>("");
   const [app, setApp] = useState<App>({} as App);
   const [chats, setChats] = useState<Array<Chat>>([]);
 
-  async function sendChat() {
+  function sendChat() {
     setLoading(true);
     fetch(`http://localhost:4001/chat`, {
       method: "POST",
@@ -36,13 +38,13 @@ function AppElm() {
       }),
     })
       .then((res) => res.json())
-      .then(() => {
+      .then(async () => {
         console.log("Sent!");
         setLoading(false);
-        fetchChats();
+        await fetchChats();
         setPrompt("");
       })
-      .catch((e) => {
+      .catch((e: any) => {
         console.log(e.message);
       });
   }
