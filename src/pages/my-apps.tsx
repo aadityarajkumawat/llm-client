@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { API_URL, CLIENT_URL } from "../constants";
 
 interface App {
   id: number;
@@ -16,9 +17,7 @@ function MyApps() {
 
   useEffect(() => {
     if (data && data.user) {
-      fetch(
-        `https://http-nodejs-production-0730.up.railway.app/apps/${data.user.id}`
-      )
+      fetch(`${API_URL}/apps/${data.user.id}`)
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
@@ -41,10 +40,8 @@ function MyApps() {
             <p>{app.name}</p>
             <p>
               App:{" "}
-              <a
-                href={`https://http-nodejs-production-0730.up.railway.app/app/${app.id}`}
-              >
-                https://http-nodejs-production-0730.up.railway.app/app/{app.id}
+              <a href={`${CLIENT_URL}/app/${app.id}`}>
+                {`${CLIENT_URL}/app/${app.id}`}
               </a>
             </p>
           </div>

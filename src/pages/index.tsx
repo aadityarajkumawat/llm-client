@@ -5,6 +5,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { API_URL } from "../constants";
 
 export default function Home() {
   const router = useRouter();
@@ -46,7 +47,12 @@ export default function Home() {
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            if (!data || !data.user) return;
+            if (status === "unauthenticated") {
+              await signIn();
+            }
+            if (!data || !data.user) {
+              return;
+            }
             setLoading(true);
             const user = data.user;
             const id = user.id;
@@ -56,13 +62,10 @@ export default function Home() {
             form.append("file", app.file);
             form.append("userId", id);
 
-            const res = await fetch(
-              "https://http-nodejs-production-0730.up.railway.app/create-app",
-              {
-                method: "POST",
-                body: form,
-              }
-            );
+            const res = await fetch(`${API_URL}/create-app`, {
+              method: "POST",
+              body: form,
+            });
 
             console.log(await res.json());
 

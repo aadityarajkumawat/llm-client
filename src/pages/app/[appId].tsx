@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { API_URL } from "../../constants";
 
 interface App {
   id: number;
@@ -27,7 +28,7 @@ function AppElm() {
 
   function sendChat() {
     setLoading(true);
-    fetch(`https://http-nodejs-production-0730.up.railway.app/chat`, {
+    fetch(`${API_URL}/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +51,7 @@ function AppElm() {
   }
 
   async function fetchChats() {
-    fetch(`https://http-nodejs-production-0730.up.railway.app/chats/${appId}`)
+    fetch(`${API_URL}/chats/${appId}`)
       .then((res) => res.json())
       .then((data) => {
         setChats(data);
@@ -59,7 +60,7 @@ function AppElm() {
 
   useEffect(() => {
     if (!appId) return;
-    fetch(`https://http-nodejs-production-0730.up.railway.app/app/${appId}`)
+    fetch(`${API_URL}/app/${appId}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
