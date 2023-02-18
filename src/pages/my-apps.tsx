@@ -14,15 +14,16 @@ interface App {
 function MyApps() {
   const { data } = useSession();
   const [apps, setApps] = useState<Array<App>>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (data && data.user) {
+      setLoading(true);
       fetch(`${API_URL}/apps/${data.user.id}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-
           setApps(data);
+          setLoading(false);
         });
     }
   }, [data]);
@@ -32,22 +33,28 @@ function MyApps() {
       <h1 className="mb-10 text-xl">My Apps</h1>
 
       <div className="flex flex-col gap-4">
-        {apps.map((app, i) => (
-          <div
-            className="m-auto max-w-[500px] rounded-md border px-10 py-5"
-            key={i}
-          >
-            <p>{app.name}</p>
-            <p>
-              App:{" "}
-              <a href={`${CLIENT_URL}/app/${app.id}`}>
-                {`${CLIENT_URL}/app/${app.id}`}
-              </a>
-            </p>
-          </div>
-        ))}
-        {apps.length === 0 && (
-          <p className="text-gray-500">You have no apps yet.</p>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            {apps.map((app, i) => (
+              <div
+                className="m-auto max-w-[500px] rounded-md border px-10 py-5"
+                key={i}
+              >
+                <p>{app.name}</p>
+                <p>
+                  App:{" "}
+                  <a href={`${CLIENT_URL}/app/${app.id}`}>
+                    {`${CLIENT_URL}/app/${app.id}`}
+                  </a>
+                </p>
+              </div>
+            ))}
+            {apps.length === 0 && (
+              <p className="text-gray-500">You have no apps yet.</p>
+            )}
+          </>
         )}
       </div>
     </div>

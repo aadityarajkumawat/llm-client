@@ -5,6 +5,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { API_URL } from "../constants";
 
 export default function Home() {
@@ -67,9 +68,17 @@ export default function Home() {
               body: form,
             });
 
-            console.log(await res.json());
+            const body = await res.json();
 
             setLoading(false);
+
+            if (body.error) {
+              toast(body.error, {
+                hideProgressBar: true,
+                position: "top-center",
+              });
+              return;
+            }
 
             if (res.ok) {
               router.push("/my-apps");
@@ -112,6 +121,7 @@ export default function Home() {
             </div>
             <button
               type="submit"
+              disabled={loading}
               className="mt-5 w-[400px] rounded-md bg-black py-2 text-white"
               style={{ opacity: loading ? 0.5 : 1 }}
             >
