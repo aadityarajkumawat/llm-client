@@ -27,7 +27,7 @@ function AppElm() {
 
   function sendChat() {
     setLoading(true);
-    fetch(`http://localhost:4001/chat`, {
+    fetch(`https://http-nodejs-production-0730.up.railway.app/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ function AppElm() {
   }
 
   async function fetchChats() {
-    fetch(`http://localhost:4001/chats/${appId}`)
+    fetch(`https://http-nodejs-production-0730.up.railway.app/chats/${appId}`)
       .then((res) => res.json())
       .then((data) => {
         setChats(data);
@@ -59,7 +59,7 @@ function AppElm() {
 
   useEffect(() => {
     if (!appId) return;
-    fetch(`http://localhost:4001/app/${appId}`)
+    fetch(`https://http-nodejs-production-0730.up.railway.app/app/${appId}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);

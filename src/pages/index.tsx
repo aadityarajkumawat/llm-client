@@ -56,10 +56,13 @@ export default function Home() {
             form.append("file", app.file);
             form.append("userId", id);
 
-            const res = await fetch("http://localhost:4001/create-app", {
-              method: "POST",
-              body: form,
-            });
+            const res = await fetch(
+              "https://http-nodejs-production-0730.up.railway.app/create-app",
+              {
+                method: "POST",
+                body: form,
+              }
+            );
 
             console.log(await res.json());
 

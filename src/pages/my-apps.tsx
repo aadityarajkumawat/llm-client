@@ -16,7 +16,9 @@ function MyApps() {
 
   useEffect(() => {
     if (data && data.user) {
-      fetch(`http://localhost:4001/apps/${data.user.id}`)
+      fetch(
+        `https://http-nodejs-production-0730.up.railway.app/apps/${data.user.id}`
+      )
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
@@ -39,8 +41,10 @@ function MyApps() {
             <p>{app.name}</p>
             <p>
               App:{" "}
-              <a href={`http://localhost:3000/app/${app.id}`}>
-                http://localhost:3000/app/{app.id}
+              <a
+                href={`https://http-nodejs-production-0730.up.railway.app/app/${app.id}`}
+              >
+                https://http-nodejs-production-0730.up.railway.app/app/{app.id}
               </a>
             </p>
           </div>
