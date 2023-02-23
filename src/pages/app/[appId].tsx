@@ -93,8 +93,8 @@ function AppElm() {
             >
               {getChats().map((chat, i) => (
                 <div className="text-left">
-                  <p className="bg-zinc-200 px-3">{chat.prompt}</p>
-                  <p className="px-3">{chat.completion}</p>
+                  <p className="bg-zinc-700 px-3 py-2">{chat.prompt}</p>
+                  <p className="px-3 py-3">{chat.completion}</p>
                 </div>
               ))}
             </div>
@@ -110,11 +110,11 @@ function AppElm() {
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   type="text"
-                  className="w-full border-r border-zinc-600 px-4 py-1"
+                  className="w-full border-r border-zinc-600 bg-zinc-800 px-4 py-1"
                 />
                 <button
                   type="submit"
-                  className="border-r border-black bg-white px-2"
+                  className="border-r border-black bg-zinc-800 px-2 text-white"
                 >
                   Send
                 </button>

@@ -39,8 +39,10 @@ export default function Home() {
         className="relative flex w-full flex-col items-center justify-center text-center"
         style={{ height: "calc(100% - 150px)" }}
       >
-        <h1 className="text-2xl">🪄 Build World's best AI applications</h1>
-        <p className="mb-4 text-zinc-500">
+        <h1 className="text-2xl font-medium">
+          🪄 Build World's best AI applications
+        </h1>
+        <p className="mb-4 text-zinc-300">
           We help you simplify your task by building you a<br />
           personalized AI based application
         </p>
@@ -97,11 +99,11 @@ export default function Home() {
                 type="text"
                 name="name"
                 id="name"
-                className="w-[400px] rounded-md border px-2 py-1 outline-zinc-500 focus:outline-dashed"
+                className="w-[400px] rounded-md border border-zinc-400 bg-[#141414] px-2 py-1 outline-zinc-500 focus:outline-dashed"
               />
             </div>
             <div className="flex flex-col items-start">
-              <label htmlFor="name" className="text-zinc-500">
+              <label htmlFor="name" className="text-zinc-300">
                 Upload a file (only .txt allowed, more extensions coming soon)
               </label>
               <input
@@ -116,13 +118,13 @@ export default function Home() {
                 type="file"
                 name="name"
                 id="name"
-                className="w-[400px] rounded-md border px-2 py-1 outline-zinc-500 focus:outline-dashed"
+                className="w-[400px] rounded-md border border-zinc-400 px-2 py-1 outline-zinc-500 focus:outline-dashed"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="mt-5 w-[400px] rounded-md bg-black py-2 text-white"
+              className="mt-5 w-[400px] rounded-md bg-zinc-50 py-2 text-black"
               style={{ opacity: loading ? 0.5 : 1 }}
             >
               {loading ? "..." : "Build App"}

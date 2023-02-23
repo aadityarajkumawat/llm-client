@@ -1,4 +1,4 @@
-export const __is_prod__ = process.env.NODE_ENV === "production";
+export const __is_prod__ = false; //process.env.NODE_ENV === "production";
 export const CLIENT_URL = __is_prod__
   ? "https://klu.vercel.app"
   : "http://localhost:3000";
