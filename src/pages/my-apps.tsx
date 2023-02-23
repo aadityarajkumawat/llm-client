@@ -47,7 +47,7 @@ function MyApps() {
           </button>
         )}
       </div>
-      <div className="flex w-full max-w-[1200px] flex-col items-start">
+      <div className="flex w-full max-w-[1200px] flex-col items-start px-10 max-sm:px-5">
         <h1 className="mb-10 text-xl">My Apps</h1>
 
         <div className="flex w-full flex-wrap justify-center gap-4">

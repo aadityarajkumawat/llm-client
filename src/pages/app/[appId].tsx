@@ -81,24 +81,28 @@ function AppElm() {
   };
 
   return (
-    <div className="h-full w-full px-10 py-5 text-center">
+    <div className="h-full w-full px-10 py-5 text-center max-sm:px-5">
       {!loadingData ? (
         <>
           <h1 className="text-xl font-bold">{app.name}</h1>
 
-          <div className="relative m-auto mt-10 h-[400px] w-[600px] rounded-md border border-zinc-600">
+          <div className="relative m-auto mt-10 h-[600px] w-full max-w-[900px] rounded-md border border-zinc-600">
             <div
               className="mb-10 overflow-y-scroll"
               style={{ height: "calc(100% - 40px)" }}
             >
               {getChats().map((chat, i) => (
-                <div className="text-left">
+                <div className="text-left" key={i}>
                   <p className="bg-zinc-700 px-3 py-2">{chat.prompt}</p>
-                  <p className="px-3 py-3">{chat.completion}</p>
+                  {chat.completion === "Loading..." ? (
+                    <div className="animate-pulse bg-zinc-300 px-3 py-3 dark:bg-zinc-600"></div>
+                  ) : (
+                    <p className="px-3 py-3">{chat.completion}</p>
+                  )}
                 </div>
               ))}
             </div>
-            <div className="absolute bottom-0 flex w-[600px] border-t border-zinc-600">
+            <div className="absolute bottom-0 flex w-full border-t border-zinc-600">
               <form
                 className="flex w-full"
                 onSubmit={async (e) => {
