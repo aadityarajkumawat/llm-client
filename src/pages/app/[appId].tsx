@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { API_URL } from "../../constants";
 
 interface App {
@@ -21,11 +21,20 @@ function AppElm() {
 
   const { appId } = router.query;
 
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const [prompt, setPrompt] = useState<string>("");
   const [app, setApp] = useState<App>({} as App);
   const [chats, setChats] = useState<Array<Chat>>([]);
+
+  const [stream, setStream] = useState<string>("");
+  const resultRef = useRef<string>("");
+
+  useEffect(() => {
+    resultRef.current = stream;
+  }, [stream]);
 
   function sendChat() {
     setLoading(true);
@@ -38,17 +47,29 @@ function AppElm() {
         appId: appId,
         prompt,
       }),
-    })
-      .then((res) => res.json())
-      .then(async () => {
-        console.log("Sent!");
-        setLoading(false);
-        await fetchChats();
-        setPrompt("");
-      })
-      .catch((e: any) => {
-        console.log(e.message);
-      });
+    }).then((res) => {
+      const reader = res.body?.getReader();
+      const read = () => {
+        if (!reader) return;
+        reader.read().then(({ done, value }) => {
+          if (done) {
+            fetchChats().then(() => {
+              console.log("done");
+            });
+            return;
+          }
+          const decoder = new TextDecoder("utf-8");
+          const token = decoder.decode(value);
+          if (token !== "[SUCCESS]") {
+            resultRef.current += token;
+            setStream(resultRef.current);
+          }
+          read();
+        });
+      };
+
+      read();
+    });
   }
 
   async function fetchChats() {
@@ -56,8 +77,21 @@ function AppElm() {
       .then((res) => res.json())
       .then((data) => {
         setChats(data);
+        setLoading(false);
+        setPrompt("");
+        setStream("");
       });
   }
+
+  useEffect(() => {
+    const chatContainer = chatContainerRef.current;
+    if (chatContainer) {
+      chatContainer.scrollBy({
+        top: chatContainer.scrollHeight,
+        behavior: "auto",
+      });
+    }
+  }, [loadingData, loading, chats.length, stream.length]);
 
   useEffect(() => {
     if (!appId) return;
@@ -76,10 +110,6 @@ function AppElm() {
     fetchChats();
   }, [appId]);
 
-  const getChats = () => {
-    return !loading ? chats : [...chats, { prompt, completion: "Loading..." }];
-  };
-
   return (
     <div className="h-full w-full px-10 py-5 text-center max-sm:px-5">
       {!loadingData ? (
@@ -88,19 +118,27 @@ function AppElm() {
 
           <div className="relative m-auto mt-10 h-[600px] w-full max-w-[900px] rounded-md border border-zinc-600">
             <div
+              ref={chatContainerRef}
+              id="chat-container"
               className="mb-10 overflow-y-scroll"
               style={{ height: "calc(100% - 40px)" }}
             >
-              {getChats().map((chat, i) => (
+              {chats.map((chat, i) => (
                 <div className="text-left" key={i}>
                   <p className="bg-zinc-700 px-3 py-2">{chat.prompt}</p>
-                  {chat.completion === "Loading..." ? (
-                    <div className="animate-pulse bg-zinc-300 px-3 py-3 dark:bg-zinc-600"></div>
+                  {chat.completion.startsWith("$stream:") ? (
+                    <p className="px-3 py-3">Streaming: {stream}</p>
                   ) : (
                     <p className="px-3 py-3">{chat.completion}</p>
                   )}
                 </div>
               ))}
+              {loading && (
+                <div className="text-left">
+                  <p className="bg-zinc-700 px-3 py-2">{prompt}</p>
+                  <p className="px-3 py-3">{stream}</p>
+                </div>
+              )}
             </div>
             <div className="absolute bottom-0 flex w-full border-t border-zinc-600">
               <form
@@ -111,10 +149,11 @@ function AppElm() {
                 }}
               >
                 <input
+                  disabled={loading}
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   type="text"
-                  className="w-full border-r border-zinc-600 bg-zinc-800 px-4 py-1"
+                  className="w-full border-r border-zinc-600 bg-zinc-800 px-4 py-1 outline-none disabled:text-zinc-400"
                 />
                 <button
                   type="submit"

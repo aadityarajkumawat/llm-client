@@ -7,12 +7,33 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { API_URL } from "../constants";
+// import { io } from "socket.io-client";
+
+// let socket: any;
 
 export default function Home() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const { data, status } = useSession();
   const [app, setApp] = useState<any>({ name: "", file: null });
+
+  // const socketInitializer = async () => {
+  //   await fetch("/api/chat");
+  //   socket = io();
+
+  //   socket.on("cond", () => {
+  //     console.log("connected");
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   socketInitializer();
+  // }, []);
+
+  // if (socket)
+  //   socket.emit("kk", () => {
+  //     console.log("kked");
+  //   });
 
   return (
     <>
