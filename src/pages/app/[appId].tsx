@@ -32,12 +32,19 @@ function AppElm() {
   const [stream, setStream] = useState<string>("");
   const resultRef = useRef<string>("");
 
+  function buildHistory() {
+    return chats
+      .slice(chats.length - 5, chats.length)
+      .map((c) => `${c.prompt}\n${c.completion}`);
+  }
+
   useEffect(() => {
     resultRef.current = stream;
   }, [stream]);
 
   function sendChat() {
     setLoading(true);
+
     fetch(`${API_URL}/chat`, {
       method: "POST",
       headers: {
@@ -46,6 +53,7 @@ function AppElm() {
       body: JSON.stringify({
         appId: appId,
         prompt,
+        chatHistory: buildHistory().join("\n"),
       }),
     }).then((res) => {
       const reader = res.body?.getReader();
@@ -60,6 +68,7 @@ function AppElm() {
           }
           const decoder = new TextDecoder("utf-8");
           const token = decoder.decode(value);
+
           if (token !== "[SUCCESS]") {
             resultRef.current += token;
             setStream(resultRef.current);
